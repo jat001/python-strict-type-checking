@@ -1,0 +1,10 @@
+{
+  "sqltools.connections": [
+    {
+      "database": "${workspaceFolder:python-strict-type-checking}/app.db",
+      "driver": "SQLite",
+      "name": "app",
+      "previewLimit": 50
+    }
+  ]
+}

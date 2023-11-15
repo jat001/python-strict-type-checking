@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "args": ["main:app", "--reload"],
+      "cwd": "${workspaceFolder}/src",
+      "justMyCode": true,
+      "module": "uvicorn",
+      "name": "app",
+      "request": "launch",
+      "type": "python"
+    }
+  ],
+  "version": "0.2.0"
+}

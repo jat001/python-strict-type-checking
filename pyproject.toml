@@ -1,0 +1,6 @@
+[tool.pyright]
+include = ["src"]
+typeCheckingMode = "strict"
+
+[tool.ruff]
+src = ["src"]
