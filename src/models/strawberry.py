@@ -1,5 +1,5 @@
 from hashlib import sha256
-from typing import Sequence
+from typing import Sequence, Union
 from uuid import uuid1
 
 import strawberry
@@ -14,14 +14,19 @@ strawberry_sqlalchemy_mapper = StrawberrySQLAlchemyMapper()  # pyright: ignore[r
 
 
 @strawberry_sqlalchemy_mapper.type(users.Users)  # pyright: ignore[reportUnknownMemberType]
-class Users:
+class User:
     __exclude__ = ["password_hash"]
 
 
 @strawberry.type
 class Query:
     @strawberry.field
-    def users(self) -> Sequence[Users]:
+    def get_user(self, id: str) -> Union[User, None]:
+        with Session() as session:
+            return session.scalar(select(users.Users).filter_by(id=id))
+
+    @strawberry.field
+    def list_users(self) -> Sequence[User]:
         with Session() as session:
             return session.scalars(select(users.Users)).all()
 
@@ -29,7 +34,7 @@ class Query:
 @strawberry.type
 class Mutation:
     @strawberry.mutation
-    def create_user(self, name: str, password: str) -> Users:
+    def create_user(self, name: str, password: str) -> str:
         with Session() as session:
             user = users.Users(
                 id=uuid1().hex,
@@ -38,7 +43,7 @@ class Mutation:
             )
             session.add(user)
             session.commit()
-            return user
+            return str(user.id)
 
 
 strawberry_sqlalchemy_mapper.finalize()
